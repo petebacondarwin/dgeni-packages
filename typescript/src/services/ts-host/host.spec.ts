@@ -66,11 +66,11 @@ describe('Host', () => {
 
       const testFunction = getExport(moduleExports, 'testFunction').getDeclarations()![0] as ts.FunctionDeclaration;
       expect(host.getTypeText(checker, testFunction)).toEqual('number');
-      expect(host.getTypeText(checker, testFunction.parameters[0])).toEqual('Array<T>');
+      expect(host.getTypeText(checker, testFunction.parameters[0])).toEqual('T[]');
       expect(host.getTypeText(checker, testFunction.typeParameters![0])).toEqual('T');
 
       const testClass = getExport(moduleExports, 'TestClass');
-      expect(host.getTypeText(checker, getProp(testClass, 'prop1'))).toEqual('Array<T>');
+      expect(host.getTypeText(checker, getProp(testClass, 'prop1'))).toEqual('T[]');
       expect(host.getTypeText(checker, getProp(testClass, 'prop2'))).toEqual('OtherClass<T, T>');
       expect(host.getTypeText(checker, getProp(testClass, 'prop3'))).toEqual('OtherClass<T, string>');
       expect(host.getTypeText(checker, getProp(testClass, 'method'))).toEqual('T');
@@ -144,6 +144,7 @@ function getProp(symbol: AugmentedSymbol, propName: string) {
   return symbol.members!.get(propName as ts.__String)!.valueDeclaration!;
 }
 
-function getType(symbol: ts.Symbol) {
-  return (symbol.declarations[0] as any).type as ts.TypeNode;
+function getType(symbol: ts.Symbol): ts.TypeNode {
+  const decl: any = symbol.declarations![0];
+  return decl.type;
 }

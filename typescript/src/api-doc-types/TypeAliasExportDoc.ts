@@ -1,11 +1,11 @@
-import { Declaration, Symbol, SyntaxKind } from 'typescript';
+import { Declaration, Symbol, SyntaxKind, TypeAliasDeclaration } from 'typescript';
 import { Host } from '../services/ts-host/host';
 import { ModuleDoc } from './ModuleDoc';
 import { ParameterizedExportDoc } from './ParameterizedExportDoc';
 
 export class TypeAliasExportDoc extends ParameterizedExportDoc {
   docType = 'type-alias';
-  typeDefinition = this.host.getTypeText(this.typeChecker, this.declaration);
+  typeDefinition = this.host.getTypeText(this.typeChecker, (this.declaration as TypeAliasDeclaration).type);
 
   constructor(host: Host,
               moduleDoc: ModuleDoc,

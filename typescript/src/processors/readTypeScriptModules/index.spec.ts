@@ -14,7 +14,7 @@ import {PropertyMemberDoc} from '../../api-doc-types/PropertyMemberDoc';
 const mockPackage = require('../../mocks/mockPackage');
 const path = require('canonical-path');
 
-describe('readTypeScriptModules', () => {
+fdescribe('readTypeScriptModules', () => {
   let dgeni: Dgeni;
   let injector: Injector;
   let processor: ReadTypeScriptModules;
@@ -291,6 +291,22 @@ describe('readTypeScriptModules', () => {
     });
   });
 
+  describe('exported enums', () => {
+    it('should extract the value of each member', () => {
+      processor.sourceFiles = [ 'enumerations.ts'];
+      const docs: DocCollection = [];
+      processor.$process(docs);
+
+      const enum1 = docs.find(doc => doc.name === 'Enum1');
+      expect(enum1.members.map((member: PropertyMemberDoc) => member.type)).toEqual(['', '', '']);
+
+      const enum2 = docs.find(doc => doc.name === 'Enum2');
+      expect(enum2.members.map((member: PropertyMemberDoc) => member.type)).toEqual(['5', '6', '10']);
+
+      const enum3 = docs.find(doc => doc.name === 'Enum3');
+      expect(enum3.members.map((member: PropertyMemberDoc) => member.type)).toEqual(['10', '', '']);
+    });
+  });
   describe('members', () => {
     describe('overloaded members', () => {
       it('should create a member doc for the "real" member, which includes an overloads property', () => {
@@ -614,17 +630,17 @@ describe('readTypeScriptModules', () => {
       const docs: DocCollection = [];
       processor.$process(docs);
       const functionDoc: FunctionExportDoc = docs.find(doc => doc.docType === 'function');
-      expect(functionDoc.parameters).toEqual(['...args: Array<any>']);
+      expect(functionDoc.parameters).toEqual(['...args: any[]']);
       expect(functionDoc.type).toEqual('void');
 
       const interfaceDoc = docs.find(doc => doc.docType === 'interface');
       expect(interfaceDoc.members.length).toEqual(2);
       const methodDoc: MethodMemberDoc = interfaceDoc.members[0];
-      expect(methodDoc.parameters).toEqual(['...args: Array<any>']);
+      expect(methodDoc.parameters).toEqual(['...args: any[]']);
       expect(methodDoc.type).toEqual('void');
 
       const propertyDoc = interfaceDoc.members[1];
-      expect(propertyDoc.type).toEqual('(...args: Array<any>) => void');    });
+      expect(propertyDoc.type).toEqual('(...args: any[]) => void');    });
   });
 
   describe('source file globbing patterns', () => {

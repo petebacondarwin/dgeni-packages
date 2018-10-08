@@ -1,4 +1,4 @@
-import { Declaration, GetAccessorDeclaration, SetAccessorDeclaration, Symbol } from 'typescript';
+import * as ts from 'typescript';
 import { Host } from '../services/ts-host/host';
 import { AccessorInfoDoc } from './AccessorInfoDoc';
 import { ContainerExportDoc } from './ContainerExportDoc';
@@ -14,10 +14,10 @@ export class PropertyMemberDoc extends MemberDoc {
 
   constructor(host: Host,
               containerDoc: ContainerExportDoc,
-              symbol: Symbol,
-              declaration: Declaration | null,
-              getAccessorDeclaration: GetAccessorDeclaration | null,
-              setAccessorDeclaration: SetAccessorDeclaration | null) {
+              symbol: ts.Symbol,
+              declaration: ts.Declaration | null,
+              getAccessorDeclaration: ts.GetAccessorDeclaration | null,
+              setAccessorDeclaration: ts.SetAccessorDeclaration | null) {
 
     // For accessors, the declaration parameter will be null, and therefore the getter declaration
     // will be used for most of the things (e.g. determination of the type). If the getter doesn't

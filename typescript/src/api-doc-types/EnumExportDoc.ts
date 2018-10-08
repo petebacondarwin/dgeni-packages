@@ -1,5 +1,6 @@
-import { Declaration, Symbol } from 'typescript';
+import * as ts from 'typescript';
 import { Host } from '../services/ts-host/host';
+import { nodeToString } from '../services/TsParser';
 import { ContainerExportDoc } from './ContainerExportDoc';
 import { ModuleDoc } from './ModuleDoc';
 
@@ -9,16 +10,24 @@ import { ModuleDoc } from './ModuleDoc';
  */
 export class EnumExportDoc extends ContainerExportDoc {
   docType = 'enum';
-  additionalDeclarations: Declaration[] = [];
+  additionalDeclarations: ts.Declaration[] = [];
   constructor(host: Host,
               moduleDoc: ModuleDoc,
-              symbol: Symbol,
-              aliasSymbol?: Symbol) {
+              symbol: ts.Symbol,
+              aliasSymbol?: ts.Symbol) {
     super(host, moduleDoc, symbol, symbol.valueDeclaration!, aliasSymbol);
 
     this.additionalDeclarations = symbol.getDeclarations()!.filter(declaration => declaration !== this.declaration);
     if (symbol.exports) {
       this.members = this.getMemberDocs(symbol.exports, true);
+      this.members.forEach(member => {
+        if (ts.isEnumMember(member.declaration) && member.declaration.initializer) {
+          // For enums we are interested in the value of the property not its type
+          member.type = nodeToString(member.declaration.initializer);
+        } else {
+          member.type = '';
+        }
+      });
     }
   }
 }

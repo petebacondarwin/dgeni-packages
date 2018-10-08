@@ -13,7 +13,7 @@ export class Host {
   /* tslint:disable:no-bitwise
   /** The format to use when serializing a type to a string. */
   typeStringFormat: ts.TypeFormatFlags = ts.TypeFormatFlags.NoTruncation |
-                                         ts.TypeFormatFlags.WriteArrayAsGenericType |
+                                         ts.TypeFormatFlags.MultilineObjectLiterals |
                                          ts.TypeFormatFlags.UseFullyQualifiedType;
 
   getContent(declaration: ts.Declaration) {
@@ -22,7 +22,7 @@ export class Host {
 
   getTypeText(checker: ts.TypeChecker, node: ts.Node): string {
     let typeString: string;
-    if (ts.isTypeAliasDeclaration(node.parent)) {
+    if (node.parent && ts.isTypeAliasDeclaration(node.parent)) {
       typeString = nodeToString(node);
     } else if ((node as any).type && ts.isTypeNode((node as any).type)) {
       typeString = checker.typeToString(checker.getTypeFromTypeNode((node as any).type), node.parent, this.typeStringFormat);
