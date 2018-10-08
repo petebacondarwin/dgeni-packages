@@ -6,7 +6,7 @@ export class Parent {
 }
 
 export class Child extends Parent {
-  someProp = Object.assign(this.someProp, {
+  someProp = Object.assign(super.someProp, {
     bar: 'baz'
   });
 }

@@ -1,11 +1,10 @@
 import { Declaration, Symbol } from 'typescript';
 import { Host } from '../services/ts-host/host';
-import { getTypeParametersText } from '../services/TsParser/getTypeParametersText';
 import { ExportDoc } from './ExportDoc';
 import { ModuleDoc } from './ModuleDoc';
 
 export abstract class ParameterizedExportDoc extends ExportDoc {
-  typeParameters = getTypeParametersText(this.declaration);
+  typeParameters = this.host.getTypeParametersText(this.typeChecker, this.declaration);
 
   constructor(host: Host,
               moduleDoc: ModuleDoc,

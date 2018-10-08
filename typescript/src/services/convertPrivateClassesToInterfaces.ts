@@ -14,6 +14,7 @@ export function convertPrivateClassesToInterfaces(exportDocs: DocCollection, add
 
       // convert the heritage since interfaces use `extends` not `implements`
       exportDoc.extendsClauses = exportDoc.extendsClauses.concat(exportDoc.implementsClauses);
+      exportDoc.implementsClauses = [];
 
       if (addInjectableReference) {
         // Add the `declare var SomeClass extends InjectableReference` construct

@@ -16,10 +16,6 @@ export class ConstExportDoc extends ExportDoc {
   }
 
   private getTypeString() {
-    if (this.variableDeclaration.type) {
-      return this.typeChecker.typeToString(this.typeChecker.getTypeFromTypeNode(this.variableDeclaration.type));
-    } else if (this.variableDeclaration.initializer) {
-      return this.typeChecker.typeToString(this.typeChecker.getTypeAtLocation(this.variableDeclaration.initializer));
-    }
+    return this.host.getTypeText(this.typeChecker, this.variableDeclaration);
   }
 }

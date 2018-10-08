@@ -1,5 +1,4 @@
 import { Declaration } from 'typescript';
-import { getDeclarationTypeText } from '../services/TsParser/getDeclarationTypeText';
 import { BaseApiDoc } from './ApiDoc';
 import { FunctionExportDoc } from './FunctionExportDoc';
 import { ModuleDoc } from './ModuleDoc';
@@ -16,7 +15,7 @@ export class OverloadInfo extends BaseApiDoc implements ParameterContainer {
   readonly parameterDocs: ParameterDoc[] = getParameters(this);
   readonly parameters = this.parameterDocs.map(p => p.paramText);
 
-  type = getDeclarationTypeText(this.declaration);
+  type = this.host.getTypeText(this.typeChecker, this.declaration);
   containerDoc: ModuleDoc = this.functionDoc.containerDoc;
 
   constructor(public functionDoc: FunctionExportDoc, declaration: Declaration) {

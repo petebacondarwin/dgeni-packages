@@ -1,7 +1,6 @@
 /* tslint:disable:no-bitwise */
 import { Declaration, Symbol } from 'typescript';
 import { Host } from '../services/ts-host/host';
-import { getTypeParametersText } from '../services/TsParser/getTypeParametersText';
 import { ContainerExportDoc } from './ContainerExportDoc';
 import { MemberDoc } from './MemberDoc';
 import { getParameters, ParameterContainer } from './ParameterContainer';
@@ -14,7 +13,7 @@ export class MethodMemberDoc extends MemberDoc implements ParameterContainer {
   readonly anchor = this.computeAnchor();
   readonly id = `${this.containerDoc.id}.${this.anchor}`;
   readonly aliases = this.computeAliases();
-  readonly typeParameters = getTypeParametersText(this.declaration);
+  readonly typeParameters = this.host.getTypeParametersText(this.typeChecker, this.declaration);
 
   constructor(host: Host,
               containerDoc: ContainerExportDoc,

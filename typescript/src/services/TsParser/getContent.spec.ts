@@ -15,17 +15,17 @@ describe('getContent', () => {
     const parseInfo = parser.parse(['tsParser/getContent.test.ts'], basePath);
     const module = parseInfo.moduleSymbols[0];
 
-    expect(getContent(module.exportArray[0].getDeclarations()![0])).toEqual('Description of TestClass\n@deprecated warning');
-    expect(getContent(module.exportArray[1].getDeclarations()![0])).toEqual('Description of function');
+    expect(getContent(module.exportArray.find(e => e.name === 'TestClass')!.valueDeclaration!)).toEqual('Description of TestClass\n@deprecated warning');
+    expect(getContent(module.exportArray.find(e => e.name === 'testFunction')!.valueDeclaration!)).toEqual('Description of function');
   });
 
   it('should get the leading jsdoc comments for class members and their parameters', () => {
     const parseInfo = parser.parse(['tsParser/getContent.test.ts'], basePath);
     const module = parseInfo.moduleSymbols[0];
 
-    expect(getContent(module.exportArray[0].members!.get('property' as __String)!.valueDeclaration)).toEqual('Some property');
+    expect(getContent(module.exportArray.find(e => e.name === 'TestClass')!.members!.get('property' as __String)!.valueDeclaration)).toEqual('Some property');
 
-    const method: MethodDeclaration = module.exportArray[0].members!.get('method' as __String)!.valueDeclaration as MethodDeclaration;
+    const method: MethodDeclaration = module.exportArray.find(e => e.name === 'TestClass')!.members!.get('method' as __String)!.valueDeclaration as MethodDeclaration;
     expect(getContent(method)).toEqual('Some method');
     expect(getContent(method.parameters[0])).toEqual('param 1');
   });

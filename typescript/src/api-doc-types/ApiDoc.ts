@@ -1,7 +1,6 @@
 import { Declaration, Symbol, TypeChecker } from 'typescript';
 import { Host } from '../services/ts-host/host';
 import { FileInfo } from '../services/TsParser/FileInfo';
-import { getContent } from '../services/TsParser/getContent';
 import { ModuleDoc } from './ModuleDoc';
 
 export interface ApiDoc {

@@ -3,7 +3,6 @@ import { Declaration, Symbol, SymbolFlags, SyntaxKind, TypeChecker } from 'types
 import { Host } from '../services/ts-host/host';
 import { FileInfo } from '../services/TsParser/FileInfo';
 import { getAccessibility } from "../services/TsParser/getAccessibility";
-import { getDeclarationTypeText } from "../services/TsParser/getDeclarationTypeText";
 import { getDecorators, ParsedDecorator } from "../services/TsParser/getDecorators";
 import { ApiDoc } from './ApiDoc';
 import { ContainerExportDoc } from './ContainerExportDoc';
@@ -32,7 +31,7 @@ export abstract class MemberDoc implements ApiDoc {
 
   accessibility = getAccessibility(this.declaration);
   decorators: ParsedDecorator[] | undefined = getDecorators(this.declaration);
-  type = getDeclarationTypeText(this.declaration);
+  type = this.host.getTypeText(this.typeChecker, this.declaration);
   isOptional = !!(this.symbol.flags & SymbolFlags.Optional);
   isGetAccessor = !!(this.symbol.flags & SymbolFlags.GetAccessor);
   isSetAccessor = !!(this.symbol.flags & SymbolFlags.SetAccessor);

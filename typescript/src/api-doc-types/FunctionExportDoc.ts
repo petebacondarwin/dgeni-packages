@@ -1,6 +1,5 @@
 import { Declaration, Symbol } from 'typescript';
 import { Host } from '../services/ts-host/host';
-import { getDeclarationTypeText } from '../services/TsParser/getDeclarationTypeText';
 import { ModuleDoc } from './ModuleDoc';
 import { OverloadInfo } from './OverloadInfo';
 import { getParameters, ParameterContainer } from './ParameterContainer';
@@ -10,7 +9,7 @@ import { ParameterizedExportDoc } from './ParameterizedExportDoc';
 export class FunctionExportDoc extends ParameterizedExportDoc implements ParameterContainer {
   docType = 'function';
 
-  type = getDeclarationTypeText(this.declaration);
+  type = this.host.getTypeText(this.typeChecker, this.declaration);
 
   overloads = this.symbol.getDeclarations()!
     .filter(declaration => declaration !== this.declaration)
